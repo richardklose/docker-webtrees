@@ -1,4 +1,4 @@
-FROM php:7.1-fpm-alpine
+FROM php:8.0.3-fpm-alpine
 
 ENV WEBTREES_VERSION 2.0.5
 
@@ -14,7 +14,7 @@ RUN set -e \
        openssl \
        # For GD (creating thumbnails inside webtrees)
        libpng-dev libjpeg-turbo-dev freetype-dev \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install \
        gd \
        pdo \
@@ -37,9 +37,9 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN set -ex \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
-    && chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && chown www-data -R /var/tmp/nginx/ \
-    && chmod g+rwx -R /var/tmp/nginx/
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
+    #&& chown www-data -R /var/tmp/nginx/ \
+    #&& chmod g+rwx -R /var/tmp/nginx/
 
 VOLUME /var/www/html/data
 
