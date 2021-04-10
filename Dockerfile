@@ -8,18 +8,23 @@ RUN set -e \
        nginx \
        # GD
        freetype libpng libjpeg-turbo \
+       libzip icu \
     && apk add --no-cache --virtual .build-deps \
        # For pulling archive over https
        ca-certificates \
        openssl \
        # For GD (creating thumbnails inside webtrees)
        libpng-dev libjpeg-turbo-dev freetype-dev \
+       libzip-dev icu-dev \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install \
+       exif \
+       intl \
        gd \
        pdo \
        mysqli \
        pdo_mysql \
+       zip \
     && wget https://github.com/fisharebest/webtrees/releases/download/$WEBTREES_VERSION/webtrees-$WEBTREES_VERSION.zip \
     && unzip webtrees-$WEBTREES_VERSION.zip \
     && rm webtrees-$WEBTREES_VERSION.zip \
@@ -37,9 +42,9 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN set -ex \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
-    && chmod +x /usr/local/bin/docker-entrypoint.sh
-    #&& chown www-data -R /var/tmp/nginx/ \
-    #&& chmod g+rwx -R /var/tmp/nginx/
+    && chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && chown www-data -R /var/lib/nginx/tmp/ \
+    && chmod g+rwx -R /var/lib/nginx/tmp/
 
 VOLUME /var/www/html/data
 
