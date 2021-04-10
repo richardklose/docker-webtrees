@@ -1,6 +1,6 @@
 FROM php:8.0.3-fpm-alpine
 
-ENV WEBTREES_VERSION 2.0.5
+ENV WEBTREES_VERSION 2.0.15
 
 RUN set -e \
     && apk add --no-cache \
