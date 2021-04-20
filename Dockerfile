@@ -43,7 +43,7 @@ RUN set -ex \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && chown www-data -R /var/lib/nginx/tmp/ \
+    && chown www-data. -R /var/lib/nginx \
     && chmod g+rwx -R /var/lib/nginx/tmp/
 
 VOLUME /var/www/html/data
